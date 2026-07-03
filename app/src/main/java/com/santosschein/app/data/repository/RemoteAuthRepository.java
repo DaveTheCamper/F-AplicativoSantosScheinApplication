@@ -14,8 +14,10 @@ import com.santosschein.app.domain.repository.AuthRepository;
 
 import java.io.IOException;
 
+import lombok.RequiredArgsConstructor;
 import retrofit2.Response;
 
+@RequiredArgsConstructor
 public final class RemoteAuthRepository implements AuthRepository {
 
     private static final String AUTHORIZATION_HEADER = "Authorization";
@@ -24,14 +26,7 @@ public final class RemoteAuthRepository implements AuthRepository {
     private final AuthApi authApi;
     private final SessionManager sessionManager;
     private final HttpErrorMapper errorMapper;
-    private final RegisterUserMapper registerUserMapper;
-
-    public RemoteAuthRepository(AuthApi authApi, SessionManager sessionManager, HttpErrorMapper errorMapper) {
-        this.authApi = authApi;
-        this.sessionManager = sessionManager;
-        this.errorMapper = errorMapper;
-        this.registerUserMapper = new RegisterUserMapper();
-    }
+    private final RegisterUserMapper registerUserMapper = new RegisterUserMapper();
 
     @Override
     public Result<AuthSession> login(String email, String password) {

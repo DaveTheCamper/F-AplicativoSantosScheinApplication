@@ -1,7 +1,9 @@
 package com.santosschein.app.core.error;
 
 import androidx.annotation.Nullable;
+import lombok.Getter;
 
+@Getter
 public final class AppError {
 
     private final ErrorType type;
@@ -19,23 +21,5 @@ public final class AppError {
         this.message = message;
         this.code = code;
         this.cause = cause;
-    }
-
-    public ErrorType getType() {
-        return type;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    @Nullable
-    public String getCode() {
-        return code;
-    }
-
-    @Nullable
-    public Throwable getCause() {
-        return cause;
     }
 }

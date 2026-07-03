@@ -6,17 +6,15 @@ import com.santosschein.app.core.session.SessionManager;
 
 import java.io.IOException;
 
+import lombok.RequiredArgsConstructor;
 import okhttp3.Interceptor;
 import okhttp3.Request;
 import okhttp3.Response;
 
+@RequiredArgsConstructor
 public final class AuthInterceptor implements Interceptor {
 
     private final SessionManager sessionManager;
-
-    public AuthInterceptor(SessionManager sessionManager) {
-        this.sessionManager = sessionManager;
-    }
 
     @NonNull
     @Override

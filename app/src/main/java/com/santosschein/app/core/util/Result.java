@@ -3,7 +3,9 @@ package com.santosschein.app.core.util;
 import androidx.annotation.Nullable;
 
 import com.santosschein.app.core.error.AppError;
+import lombok.Getter;
 
+@Getter
 public final class Result<T> {
 
     @Nullable
@@ -26,15 +28,5 @@ public final class Result<T> {
 
     public boolean isSuccess() {
         return error == null;
-    }
-
-    @Nullable
-    public T getData() {
-        return data;
-    }
-
-    @Nullable
-    public AppError getError() {
-        return error;
     }
 }

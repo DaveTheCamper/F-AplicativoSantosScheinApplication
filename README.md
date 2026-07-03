@@ -4,11 +4,12 @@ Aplicativo Android em Java para agendamento de horarios em campos de futebol do 
 
 ## Tecnologias
 
-- Java 11
+- Java 21
 - Gradle e Android Gradle Plugin
 - AndroidX, Fragment, RecyclerView, ViewModel e LiveData
 - Material Components
 - Retrofit, OkHttp e Gson
+- Lombok
 - JUnit, Mockito e AndroidX Arch Core Testing
 
 ## Arquitetura
@@ -118,16 +119,16 @@ Gerar APK de desenvolvimento:
 
 ## Endpoints esperados
 
-- `POST /auth/login`
-- `POST /auth/register`
-- `GET /me/reservations/next`
-- `GET /reservations/available-days?year=2026&month=7`
-- `GET /reservations/available-slots?date=2026-07-10`
-- `POST /reservations`
-- `GET /me/reservations?status=upcoming`
-- `GET /me/reservations?status=past`
-- `DELETE /me/reservations/{reservationId}`
-- `GET /me/profile`
+- `POST /api/v1/auth/login`
+- `POST /api/v1/auth/register`
+- `GET /api/v1/users/me/reservations/next`
+- `GET /api/v1/reservations/available-days?year=2026&month=7`
+- `GET /api/v1/reservations/available-slots?date=2026-07-10`
+- `POST /api/v1/reservations`
+- `GET /api/v1/users/me/reservations?status=upcoming`
+- `GET /api/v1/users/me/reservations?status=past`
+- `DELETE /api/v1/users/me/reservations/{reservationId}`
+- `GET /api/v1/users/me`
 
 ## Observacoes importantes
 

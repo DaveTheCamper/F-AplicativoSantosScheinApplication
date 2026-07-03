@@ -1,14 +1,13 @@
 package com.santosschein.app.core.session;
 
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
 public final class SessionManager {
 
     private static final String BEARER_PREFIX = "Bearer ";
 
     private final SessionStorage sessionStorage;
-
-    public SessionManager(SessionStorage sessionStorage) {
-        this.sessionStorage = sessionStorage;
-    }
 
     public void saveAuthorizationHeader(String authorizationHeader) {
         if (authorizationHeader == null || authorizationHeader.trim().isEmpty()) {

@@ -11,21 +11,16 @@ import com.santosschein.app.domain.repository.UserRepository;
 
 import java.io.IOException;
 
+import lombok.RequiredArgsConstructor;
 import retrofit2.Response;
 
+@RequiredArgsConstructor
 public final class RemoteUserRepository implements UserRepository {
 
     private final UserApi userApi;
     private final SessionManager sessionManager;
     private final HttpErrorMapper errorMapper;
-    private final UserMapper userMapper;
-
-    public RemoteUserRepository(UserApi userApi, SessionManager sessionManager, HttpErrorMapper errorMapper) {
-        this.userApi = userApi;
-        this.sessionManager = sessionManager;
-        this.errorMapper = errorMapper;
-        this.userMapper = new UserMapper();
-    }
+    private final UserMapper userMapper = new UserMapper();
 
     @Override
     public Result<User> getProfile() {

@@ -1,7 +1,12 @@
 package com.santosschein.app.data.remote.dto;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
 import java.math.BigDecimal;
 
+@Getter
+@NoArgsConstructor
 public final class ReservationDto {
 
     private String id;
@@ -11,32 +16,4 @@ public final class ReservationDto {
     private String endTime;
     private BigDecimal price;
     private String status;
-
-    public String getId() {
-        return id;
-    }
-
-    public String getFieldName() {
-        return fieldName;
-    }
-
-    public String getDate() {
-        return date;
-    }
-
-    public String getStartTime() {
-        return startTime;
-    }
-
-    public String getEndTime() {
-        return endTime;
-    }
-
-    public BigDecimal getPrice() {
-        return price;
-    }
-
-    public String getStatus() {
-        return status;
-    }
 }

@@ -13,6 +13,7 @@ retrofit = "2.11.0"
 okhttp = "4.12.0"
 mockito = "5.14.2"
 desugarJdkLibs = "2.1.5"
+lombok = "1.18.34"
 
 [libraries]
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -31,6 +32,7 @@ okhttp = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okhtt
 okhttp-logging-interceptor = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okhttp" }
 mockito-core = { group = "org.mockito", name = "mockito-core", version.ref = "mockito" }
 desugar-jdk-libs = { group = "com.android.tools", name = "desugar_jdk_libs", version.ref = "desugarJdkLibs" }
+lombok = { group = "org.projectlombok", name = "lombok", version.ref = "lombok" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

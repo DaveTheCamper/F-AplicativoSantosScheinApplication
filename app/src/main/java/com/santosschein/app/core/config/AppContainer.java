@@ -19,9 +19,11 @@ import com.santosschein.app.domain.repository.AuthRepository;
 import com.santosschein.app.domain.repository.ReservationRepository;
 import com.santosschein.app.domain.repository.UserRepository;
 import com.santosschein.app.domain.usecase.GetInitialAppDestinationUseCase;
+import lombok.Getter;
 
 import retrofit2.Retrofit;
 
+@Getter
 public final class AppContainer {
 
     private final AppConfig appConfig;
@@ -64,33 +66,5 @@ public final class AppContainer {
         }
 
         initialAppDestinationUseCase = new GetInitialAppDestinationUseCase(sessionStorage);
-    }
-
-    public AppConfig getAppConfig() {
-        return appConfig;
-    }
-
-    public SessionStorage getSessionStorage() {
-        return sessionStorage;
-    }
-
-    public SessionManager getSessionManager() {
-        return sessionManager;
-    }
-
-    public AuthRepository getAuthRepository() {
-        return authRepository;
-    }
-
-    public ReservationRepository getReservationRepository() {
-        return reservationRepository;
-    }
-
-    public UserRepository getUserRepository() {
-        return userRepository;
-    }
-
-    public GetInitialAppDestinationUseCase getInitialAppDestinationUseCase() {
-        return initialAppDestinationUseCase;
     }
 }

@@ -1,7 +1,9 @@
 package com.santosschein.app.core.config;
 
 import com.santosschein.app.BuildConfig;
+import lombok.Getter;
 
+@Getter
 public final class AppConfig {
 
     private final Environment environment;
@@ -14,14 +16,6 @@ public final class AppConfig {
     public AppConfig(Environment environment, String apiBaseUrl) {
         this.environment = environment;
         this.apiBaseUrl = apiBaseUrl;
-    }
-
-    public Environment getEnvironment() {
-        return environment;
-    }
-
-    public String getApiBaseUrl() {
-        return apiBaseUrl;
     }
 
     public boolean isMockMode() {

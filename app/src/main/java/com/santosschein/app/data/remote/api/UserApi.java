@@ -7,6 +7,6 @@ import retrofit2.http.GET;
 
 public interface UserApi {
 
-    @GET("me/profile")
+    @GET("api/v1/users/me")
     Call<UserProfileDto> getProfile();
 }

@@ -3,7 +3,9 @@ package com.santosschein.app.presentation.common;
 import androidx.annotation.Nullable;
 
 import com.santosschein.app.core.error.AppError;
+import lombok.Getter;
 
+@Getter
 public final class UiState<T> {
 
     public enum Status {
@@ -55,25 +57,6 @@ public final class UiState<T> {
 
     public static <T> UiState<T> error(String message) {
         return new UiState<>(Status.ERROR, null, null, message);
-    }
-
-    public Status getStatus() {
-        return status;
-    }
-
-    @Nullable
-    public T getData() {
-        return data;
-    }
-
-    @Nullable
-    public AppError getError() {
-        return error;
-    }
-
-    @Nullable
-    public String getMessage() {
-        return message;
     }
 
     public boolean isLoading() {

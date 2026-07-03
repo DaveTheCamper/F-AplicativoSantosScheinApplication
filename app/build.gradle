@@ -73,9 +73,14 @@ dependencies {
     implementation libs.okhttp
     implementation libs.okhttp.logging.interceptor
 
+    compileOnly libs.lombok
+    annotationProcessor libs.lombok
+
     testImplementation libs.junit
     testImplementation libs.mockito.core
     testImplementation libs.arch.core.testing
+    testCompileOnly libs.lombok
+    testAnnotationProcessor libs.lombok
 
     androidTestImplementation libs.espresso.core
     androidTestImplementation libs.ext.junit

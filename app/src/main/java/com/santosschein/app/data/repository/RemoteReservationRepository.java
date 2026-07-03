@@ -22,8 +22,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import lombok.RequiredArgsConstructor;
 import retrofit2.Response;
 
+@RequiredArgsConstructor
 public final class RemoteReservationRepository implements ReservationRepository {
 
     private static final String CREATE_CONFLICT_MESSAGE = "Esse horario nao esta mais disponivel.";
@@ -31,20 +33,8 @@ public final class RemoteReservationRepository implements ReservationRepository 
     private final ReservationApi reservationApi;
     private final SessionManager sessionManager;
     private final HttpErrorMapper errorMapper;
-    private final ReservationMapper reservationMapper;
-    private final ReservationSlotMapper slotMapper;
-
-    public RemoteReservationRepository(
-            ReservationApi reservationApi,
-            SessionManager sessionManager,
-            HttpErrorMapper errorMapper
-    ) {
-        this.reservationApi = reservationApi;
-        this.sessionManager = sessionManager;
-        this.errorMapper = errorMapper;
-        this.reservationMapper = new ReservationMapper();
-        this.slotMapper = new ReservationSlotMapper();
-    }
+    private final ReservationMapper reservationMapper = new ReservationMapper();
+    private final ReservationSlotMapper slotMapper = new ReservationSlotMapper();
 
     @Override
     public Result<Reservation> getNextReservation() {
