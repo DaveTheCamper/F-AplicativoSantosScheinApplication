@@ -1,5 +1,7 @@
 package com.santosschein.app.data.remote.dto;
 
+import java.math.BigDecimal;
+
 public final class ReservationDto {
 
     private String id;
@@ -7,7 +9,7 @@ public final class ReservationDto {
     private String date;
     private String startTime;
     private String endTime;
-    private String amount;
+    private BigDecimal price;
     private String status;
 
     public String getId() {
@@ -30,8 +32,8 @@ public final class ReservationDto {
         return endTime;
     }
 
-    public String getAmount() {
-        return amount;
+    public BigDecimal getPrice() {
+        return price;
     }
 
     public String getStatus() {

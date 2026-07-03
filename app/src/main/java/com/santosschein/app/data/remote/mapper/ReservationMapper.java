@@ -4,7 +4,6 @@ import com.santosschein.app.data.remote.dto.ReservationDto;
 import com.santosschein.app.domain.model.Reservation;
 import com.santosschein.app.domain.model.ReservationStatus;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
@@ -17,8 +16,21 @@ public final class ReservationMapper {
                 LocalDate.parse(dto.getDate()),
                 LocalTime.parse(dto.getStartTime()),
                 LocalTime.parse(dto.getEndTime()),
-                new BigDecimal(dto.getAmount()),
-                ReservationStatus.valueOf(dto.getStatus())
+                dto.getPrice(),
+                mapStatus(dto.getStatus())
         );
+    }
+
+    private ReservationStatus mapStatus(String status) {
+        if ("ACTIVE".equalsIgnoreCase(status)) {
+            return ReservationStatus.ACTIVE;
+        }
+        if ("CANCELLED".equalsIgnoreCase(status)) {
+            return ReservationStatus.CANCELLED;
+        }
+        if ("COMPLETED".equalsIgnoreCase(status)) {
+            return ReservationStatus.COMPLETED;
+        }
+        return ReservationStatus.ACTIVE;
     }
 }

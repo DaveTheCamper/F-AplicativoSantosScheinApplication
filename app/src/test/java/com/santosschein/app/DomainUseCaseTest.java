@@ -310,7 +310,7 @@ public class DomainUseCaseTest {
                 LocalTime.of(19, 0),
                 LocalTime.of(20, 0),
                 new BigDecimal("120.00"),
-                ReservationStatus.SCHEDULED
+                ReservationStatus.ACTIVE
         );
     }
 }

@@ -1,7 +1,7 @@
 package com.santosschein.app.core.network;
 
 import com.santosschein.app.BuildConfig;
-import com.santosschein.app.core.session.SessionStorage;
+import com.santosschein.app.core.session.SessionManager;
 
 import java.util.concurrent.TimeUnit;
 
@@ -13,7 +13,7 @@ public final class OkHttpClientFactory {
     private OkHttpClientFactory() {
     }
 
-    public static OkHttpClient create(SessionStorage sessionStorage) {
+    public static OkHttpClient create(SessionManager sessionManager) {
         HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
         loggingInterceptor.setLevel(BuildConfig.DEBUG
                 ? HttpLoggingInterceptor.Level.BODY
@@ -23,7 +23,7 @@ public final class OkHttpClientFactory {
                 .connectTimeout(20, TimeUnit.SECONDS)
                 .readTimeout(20, TimeUnit.SECONDS)
                 .writeTimeout(20, TimeUnit.SECONDS)
-                .addInterceptor(new AuthInterceptor(sessionStorage))
+                .addInterceptor(new AuthInterceptor(sessionManager))
                 .addInterceptor(loggingInterceptor)
                 .build();
     }

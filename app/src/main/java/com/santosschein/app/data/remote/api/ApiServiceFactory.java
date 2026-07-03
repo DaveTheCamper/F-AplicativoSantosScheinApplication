@@ -13,4 +13,12 @@ public final class ApiServiceFactory {
     public ReservationApi createReservationApi() {
         return retrofit.create(ReservationApi.class);
     }
+
+    public AuthApi createAuthApi() {
+        return retrofit.create(AuthApi.class);
+    }
+
+    public UserApi createUserApi() {
+        return retrofit.create(UserApi.class);
+    }
 }

@@ -1,7 +1,7 @@
 package com.santosschein.app.domain.model;
 
 public enum ReservationStatus {
-    SCHEDULED,
+    ACTIVE,
     CANCELLED,
     COMPLETED
 }

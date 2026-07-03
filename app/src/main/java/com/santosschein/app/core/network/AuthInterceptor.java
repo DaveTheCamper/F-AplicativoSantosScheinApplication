@@ -2,7 +2,7 @@ package com.santosschein.app.core.network;
 
 import androidx.annotation.NonNull;
 
-import com.santosschein.app.core.session.SessionStorage;
+import com.santosschein.app.core.session.SessionManager;
 
 import java.io.IOException;
 
@@ -12,17 +12,17 @@ import okhttp3.Response;
 
 public final class AuthInterceptor implements Interceptor {
 
-    private final SessionStorage sessionStorage;
+    private final SessionManager sessionManager;
 
-    public AuthInterceptor(SessionStorage sessionStorage) {
-        this.sessionStorage = sessionStorage;
+    public AuthInterceptor(SessionManager sessionManager) {
+        this.sessionManager = sessionManager;
     }
 
     @NonNull
     @Override
     public Response intercept(@NonNull Chain chain) throws IOException {
         Request originalRequest = chain.request();
-        String token = sessionStorage.getJwtToken();
+        String token = sessionManager.getJwtToken();
 
         if (token == null || token.trim().isEmpty()) {
             return chain.proceed(originalRequest);
@@ -31,6 +31,10 @@ public final class AuthInterceptor implements Interceptor {
         Request authenticatedRequest = originalRequest.newBuilder()
                 .addHeader("Authorization", "Bearer " + token)
                 .build();
-        return chain.proceed(authenticatedRequest);
+        Response response = chain.proceed(authenticatedRequest);
+        if (response.code() == 401) {
+            sessionManager.clearSession();
+        }
+        return response;
     }
 }
