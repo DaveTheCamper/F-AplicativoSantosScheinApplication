@@ -1,8 +1,6 @@
 package com.santosschein.app;
 
 import android.os.Bundle;
-import android.view.ViewGroup;
-import android.widget.FrameLayout;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,28 +12,36 @@ import com.santosschein.app.presentation.navigation.FragmentAppNavigator;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final int CONTENT_VIEW_ID = 1001;
-
+    private AppContainer appContainer;
     private FragmentAppNavigator navigator;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
 
-        FrameLayout container = new FrameLayout(this);
-        container.setId(CONTENT_VIEW_ID);
-        container.setLayoutParams(new FrameLayout.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.MATCH_PARENT
-        ));
-        setContentView(container);
-
-        AppContainer appContainer = new AppContainer(getApplicationContext());
-        navigator = new FragmentAppNavigator(getSupportFragmentManager(), CONTENT_VIEW_ID);
+        appContainer = ((SantosScheinApplication) getApplication()).getAppContainer();
+        navigator = new FragmentAppNavigator(getSupportFragmentManager(), R.id.fragment_container);
 
         if (savedInstanceState == null) {
             InitialDestination initialDestination = appContainer.getInitialAppDestinationUseCase().execute();
             navigator.navigateTo(toAppDestination(initialDestination));
+        }
+    }
+
+    public AppContainer getAppContainer() {
+        return appContainer;
+    }
+
+    public void navigateTo(AppDestination destination) {
+        navigator.navigateTo(destination);
+    }
+
+    public void navigateBack() {
+        if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
+            getSupportFragmentManager().popBackStack();
+        } else {
+            navigator.navigateTo(AppDestination.HOME);
         }
     }
 

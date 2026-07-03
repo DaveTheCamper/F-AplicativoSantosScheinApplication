@@ -2,13 +2,13 @@ package com.santosschein.app.presentation.navigation;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.santosschein.app.presentation.auth.login.LoginFragment;
 import com.santosschein.app.presentation.auth.register.RegisterFragment;
 import com.santosschein.app.presentation.home.HomeFragment;
 import com.santosschein.app.presentation.profile.ProfileFragment;
 import com.santosschein.app.presentation.reservation.create.CreateReservationFragment;
-import com.santosschein.app.presentation.reservation.detail.ReservationDetailFragment;
 import com.santosschein.app.presentation.reservation.list.ReservationListFragment;
 
 public final class FragmentAppNavigator implements AppNavigator {
@@ -23,9 +23,16 @@ public final class FragmentAppNavigator implements AppNavigator {
 
     @Override
     public void navigateTo(AppDestination destination) {
-        fragmentManager.beginTransaction()
-                .replace(containerId, createFragment(destination))
-                .commit();
+        if (destination == AppDestination.LOGIN || destination == AppDestination.HOME) {
+            fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        }
+
+        FragmentTransaction transaction = fragmentManager.beginTransaction()
+                .replace(containerId, createFragment(destination));
+        if (destination != AppDestination.LOGIN && destination != AppDestination.HOME) {
+            transaction.addToBackStack(destination.name());
+        }
+        transaction.commit();
     }
 
     private Fragment createFragment(AppDestination destination) {
@@ -36,10 +43,10 @@ public final class FragmentAppNavigator implements AppNavigator {
                 return new HomeFragment();
             case RESERVATION_CREATE:
                 return new CreateReservationFragment();
-            case RESERVATION_LIST:
-                return new ReservationListFragment();
-            case RESERVATION_DETAIL:
-                return new ReservationDetailFragment();
+            case RESERVATION_UPCOMING:
+                return ReservationListFragment.newInstance(ReservationListFragment.MODE_UPCOMING);
+            case RESERVATION_PAST:
+                return ReservationListFragment.newInstance(ReservationListFragment.MODE_PAST);
             case PROFILE:
                 return new ProfileFragment();
             case LOGIN:

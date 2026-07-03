@@ -36,6 +36,9 @@ public final class RegisterUserUseCase {
         if (ValidationUtils.isBlank(input.getPassword())) {
             return ValidationUtils.validationError("Informe a senha.");
         }
+        if (input.getPassword().trim().length() < 6) {
+            return ValidationUtils.validationError("A senha deve ter ao menos 6 caracteres.");
+        }
         return authRepository.register(input);
     }
 }
