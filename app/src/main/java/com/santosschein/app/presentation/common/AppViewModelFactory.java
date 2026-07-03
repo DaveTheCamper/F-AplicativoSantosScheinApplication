@@ -44,8 +44,7 @@ public final class AppViewModelFactory implements ViewModelProvider.Factory {
         if (modelClass.isAssignableFrom(HomeViewModel.class)) {
             return (T) new HomeViewModel(
                     new GetProfileUseCase(appContainer.getUserRepository()),
-                    new GetNextReservationUseCase(appContainer.getReservationRepository()),
-                    new LogoutUseCase(appContainer.getAuthRepository())
+                    new GetNextReservationUseCase(appContainer.getReservationRepository())
             );
         }
         if (modelClass.isAssignableFrom(CreateReservationViewModel.class)) {
@@ -63,7 +62,10 @@ public final class AppViewModelFactory implements ViewModelProvider.Factory {
             );
         }
         if (modelClass.isAssignableFrom(ProfileViewModel.class)) {
-            return (T) new ProfileViewModel(new GetProfileUseCase(appContainer.getUserRepository()));
+            return (T) new ProfileViewModel(
+                    new GetProfileUseCase(appContainer.getUserRepository()),
+                    new LogoutUseCase(appContainer.getAuthRepository())
+            );
         }
         throw new IllegalArgumentException("ViewModel nao suportado: " + modelClass.getName());
     }

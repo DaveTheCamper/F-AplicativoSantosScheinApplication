@@ -11,7 +11,6 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.progressindicator.CircularProgressIndicator;
 import com.google.android.material.snackbar.Snackbar;
@@ -61,15 +60,6 @@ public final class HomeFragment extends Fragment {
 
         view.findViewById(R.id.createReservationButton)
                 .setOnClickListener(v -> activity.navigateTo(AppDestination.RESERVATION_CREATE));
-        view.findViewById(R.id.upcomingReservationsButton)
-                .setOnClickListener(v -> activity.navigateTo(AppDestination.RESERVATIONS));
-        view.findViewById(R.id.profileButton)
-                .setOnClickListener(v -> activity.navigateTo(AppDestination.PROFILE));
-        MaterialButton logoutButton = view.findViewById(R.id.logoutButton);
-        logoutButton.setOnClickListener(v -> {
-            viewModel.logout();
-            activity.navigateTo(AppDestination.LOGIN);
-        });
 
         viewModel.getHomeState().observe(getViewLifecycleOwner(), state -> {
             progressIndicator.setVisibility(state.isLoading() ? View.VISIBLE : View.GONE);

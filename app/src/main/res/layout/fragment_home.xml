@@ -149,55 +149,6 @@
             android:textSize="15sp"
             android:visibility="gone" />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="22dp"
-            android:text="Atalhos"
-            android:textColor="@color/santos_graphite"
-            android:textSize="18sp"
-            android:textStyle="bold" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:orientation="horizontal">
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/upcomingReservationsButton"
-                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                android:layout_width="0dp"
-                android:layout_height="52dp"
-                android:layout_marginEnd="6dp"
-                android:layout_weight="1"
-                android:text="Reservas"
-                android:textColor="@color/santos_royal_blue"
-                app:cornerRadius="8dp"
-                app:strokeColor="@color/santos_royal_blue" />
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/profileButton"
-                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                android:layout_width="0dp"
-                android:layout_height="52dp"
-                android:layout_marginStart="6dp"
-                android:layout_weight="1"
-                android:text="Perfil"
-                android:textColor="@color/santos_royal_blue"
-                app:cornerRadius="8dp"
-                app:strokeColor="@color/santos_royal_blue" />
-        </LinearLayout>
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/logoutButton"
-            style="@style/Widget.MaterialComponents.Button.TextButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="Sair"
-            android:textColor="@color/santos_graphite" />
-
         <com.google.android.material.progressindicator.CircularProgressIndicator
             android:id="@+id/progressIndicator"
             android:layout_width="wrap_content"

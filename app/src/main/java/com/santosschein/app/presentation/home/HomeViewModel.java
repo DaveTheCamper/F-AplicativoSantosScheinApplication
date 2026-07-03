@@ -9,7 +9,6 @@ import com.santosschein.app.domain.model.Reservation;
 import com.santosschein.app.domain.model.User;
 import com.santosschein.app.domain.usecase.GetNextReservationUseCase;
 import com.santosschein.app.domain.usecase.GetProfileUseCase;
-import com.santosschein.app.domain.usecase.LogoutUseCase;
 import com.santosschein.app.presentation.common.UiState;
 
 import java.util.concurrent.ExecutorService;
@@ -19,18 +18,15 @@ public final class HomeViewModel extends ViewModel {
 
     private final GetProfileUseCase getProfileUseCase;
     private final GetNextReservationUseCase getNextReservationUseCase;
-    private final LogoutUseCase logoutUseCase;
     private final ExecutorService executorService = Executors.newSingleThreadExecutor();
     private final MutableLiveData<UiState<HomeUiModel>> homeState = new MutableLiveData<>(UiState.idle());
 
     public HomeViewModel(
             GetProfileUseCase getProfileUseCase,
-            GetNextReservationUseCase getNextReservationUseCase,
-            LogoutUseCase logoutUseCase
+            GetNextReservationUseCase getNextReservationUseCase
     ) {
         this.getProfileUseCase = getProfileUseCase;
         this.getNextReservationUseCase = getNextReservationUseCase;
-        this.logoutUseCase = logoutUseCase;
     }
 
     public LiveData<UiState<HomeUiModel>> getHomeState() {
@@ -57,10 +53,6 @@ public final class HomeViewModel extends ViewModel {
                     reservationResult.getData()
             )));
         });
-    }
-
-    public void logout() {
-        logoutUseCase.execute();
     }
 
     @Override

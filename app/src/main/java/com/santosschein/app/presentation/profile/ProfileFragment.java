@@ -58,6 +58,10 @@ public final class ProfileFragment extends Fragment {
         documentTextView = view.findViewById(R.id.documentTextView);
         emailTextView = view.findViewById(R.id.emailTextView);
         progressIndicator = view.findViewById(R.id.progressIndicator);
+        view.findViewById(R.id.logoutButton).setOnClickListener(v -> {
+            viewModel.logout();
+            activity.navigateTo(AppDestination.LOGIN);
+        });
 
         viewModel.getProfileState().observe(getViewLifecycleOwner(), state -> {
             progressIndicator.setVisibility(state.isLoading() ? View.VISIBLE : View.GONE);
