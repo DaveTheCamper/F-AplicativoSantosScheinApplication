@@ -1,6 +1,5 @@
 package com.santosschein.app;
 
-import com.santosschein.app.core.error.AppError;
 import com.santosschein.app.core.error.ErrorType;
 import com.santosschein.app.core.network.HttpErrorMapper;
 import com.santosschein.app.core.session.SessionManager;
@@ -24,6 +23,7 @@ import com.santosschein.app.domain.model.User;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
@@ -66,6 +66,23 @@ public class DataLayerTest {
     }
 
     @Test
+    public void mockRegisterWithNewUserSucceeds() {
+        MockAuthRepository repository = new MockAuthRepository(new MockDataStore(), new SessionManager(new FakeSessionStorage()));
+        RegisterUserInput input = new RegisterUserInput(
+                "Maria",
+                "Souza",
+                LocalDate.of(1992, 5, 12),
+                "98765432100",
+                "maria@email.com",
+                "senha123"
+        );
+
+        Result<Void> result = repository.register(input);
+
+        assertTrue(result.isSuccess());
+    }
+
+    @Test
     public void mockRegisterWithExistingDocumentReturnsConflict() {
         MockAuthRepository repository = new MockAuthRepository(new MockDataStore(), new SessionManager(new FakeSessionStorage()));
         RegisterUserInput input = new RegisterUserInput(
@@ -84,10 +101,51 @@ public class DataLayerTest {
     }
 
     @Test
+    public void mockRegisterWithExistingEmailReturnsConflict() {
+        MockAuthRepository repository = new MockAuthRepository(new MockDataStore(), new SessionManager(new FakeSessionStorage()));
+        RegisterUserInput input = new RegisterUserInput(
+                "Ana",
+                "Costa",
+                LocalDate.of(1993, 8, 4),
+                "22233344455",
+                MockDataStore.VALID_EMAIL,
+                "senha123"
+        );
+
+        Result<Void> result = repository.register(input);
+
+        assertFalse(result.isSuccess());
+        assertEquals(ErrorType.CONFLICT, result.getError().getType());
+    }
+
+    @Test
+    public void mockLogoutClearsSession() {
+        FakeSessionStorage storage = new FakeSessionStorage();
+        SessionManager sessionManager = new SessionManager(storage);
+        MockAuthRepository repository = new MockAuthRepository(new MockDataStore(), sessionManager);
+        repository.login(MockDataStore.VALID_EMAIL, MockDataStore.VALID_PASSWORD);
+
+        repository.logout();
+
+        assertFalse(storage.hasActiveSession());
+    }
+
+    @Test
+    public void mockNextReservationReturnsUpcomingReservation() {
+        MockReservationRepository repository = new MockReservationRepository(new MockDataStore());
+
+        Result<Reservation> result = repository.getNextReservation();
+
+        assertTrue(result.isSuccess());
+        assertNotNull(result.getData());
+        assertEquals("res_123", result.getData().getId());
+    }
+
+    @Test
     public void mockReservationCreationConsumesSlotAndSecondTryConflicts() {
         MockDataStore dataStore = new MockDataStore();
         MockReservationRepository repository = new MockReservationRepository(dataStore);
-        LocalDate date = LocalDate.of(2026, 7, 10);
+        LocalDate date = firstAvailableDate(dataStore);
 
         Result<Reservation> firstResult = repository.createReservation(date, "slot_2");
         Result<Reservation> secondResult = repository.createReservation(date, "slot_2");
@@ -113,10 +171,12 @@ public class DataLayerTest {
 
     @Test
     public void mockReservationListsDaysSlotsPastAndUpcomingReservations() {
-        MockReservationRepository repository = new MockReservationRepository(new MockDataStore());
+        MockDataStore dataStore = new MockDataStore();
+        MockReservationRepository repository = new MockReservationRepository(dataStore);
+        LocalDate date = firstAvailableDate(dataStore);
 
-        Result<List<LocalDate>> days = repository.getAvailableDays(2026, 7);
-        Result<List<ReservationSlot>> slots = repository.getAvailableSlots(LocalDate.of(2026, 7, 10));
+        Result<List<LocalDate>> days = repository.getAvailableDays(date.getYear(), date.getMonthValue());
+        Result<List<ReservationSlot>> slots = repository.getAvailableSlots(date);
         Result<List<Reservation>> upcoming = repository.getUpcomingReservations();
         Result<List<Reservation>> past = repository.getPastReservations();
 
@@ -149,6 +209,26 @@ public class DataLayerTest {
 
         assertTrue(result.isSuccess());
         assertEquals(ReservationStatus.CANCELLED, dataStore.getUpcomingReservations().get(0).getStatus());
+    }
+
+    @Test
+    public void mockReservationCancelInsideLeadTimeReturnsConflict() {
+        MockDataStore dataStore = new MockDataStore();
+        dataStore.getUpcomingReservations().add(new Reservation(
+                "res_late",
+                "Campo 1",
+                LocalDate.now(),
+                LocalTime.of(21, 0),
+                LocalTime.of(22, 0),
+                new BigDecimal("150.00"),
+                ReservationStatus.ACTIVE
+        ));
+        MockReservationRepository repository = new MockReservationRepository(dataStore);
+
+        Result<Void> result = repository.cancelReservation("res_late");
+
+        assertFalse(result.isSuccess());
+        assertEquals(ErrorType.CONFLICT, result.getError().getType());
     }
 
     @Test
@@ -212,6 +292,13 @@ public class DataLayerTest {
         public boolean hasActiveSession() {
             return token != null && !token.trim().isEmpty();
         }
+    }
+
+    private static LocalDate firstAvailableDate(MockDataStore dataStore) {
+        return dataStore.getSlotsByDate().keySet().stream()
+                .sorted()
+                .findFirst()
+                .orElseThrow(AssertionError::new);
     }
 
     private static final class FakeAuthApi implements AuthApi {
