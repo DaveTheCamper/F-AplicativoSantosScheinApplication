@@ -35,9 +35,9 @@ public final class MockDataStore {
         );
         users.add(defaultUser);
 
-        LocalDate firstDate = LocalDate.of(2026, 7, 10);
-        LocalDate secondDate = LocalDate.of(2026, 7, 11);
-        LocalDate thirdDate = LocalDate.of(2026, 7, 13);
+        LocalDate firstDate = LocalDate.now().plusDays(7);
+        LocalDate secondDate = firstDate.plusDays(1);
+        LocalDate thirdDate = firstDate.plusDays(3);
 
         addSlots(firstDate);
         addSlots(secondDate);
@@ -56,7 +56,7 @@ public final class MockDataStore {
         pastReservations.add(new Reservation(
                 "res_001",
                 "Campo 2",
-                LocalDate.of(2026, 6, 20),
+                LocalDate.now().minusDays(7),
                 LocalTime.of(18, 0),
                 LocalTime.of(19, 0),
                 new BigDecimal("150.00"),

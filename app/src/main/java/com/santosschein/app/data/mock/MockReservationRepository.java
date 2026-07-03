@@ -103,6 +103,14 @@ public final class MockReservationRepository implements ReservationRepository {
         for (int i = 0; i < dataStore.getUpcomingReservations().size(); i++) {
             Reservation reservation = dataStore.getUpcomingReservations().get(i);
             if (reservation.getId().equals(reservationId)) {
+                if (!reservation.getDate().isAfter(LocalDate.now().plusDays(1))) {
+                    return Result.failure(new AppError(
+                            ErrorType.CONFLICT,
+                            "Nao e possivel cancelar com menos de 24 horas de antecedencia.",
+                            "409",
+                            null
+                    ));
+                }
                 dataStore.getUpcomingReservations().set(i, new Reservation(
                         reservation.getId(),
                         reservation.getFieldName(),
