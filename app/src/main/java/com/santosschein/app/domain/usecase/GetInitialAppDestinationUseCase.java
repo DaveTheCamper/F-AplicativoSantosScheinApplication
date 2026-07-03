@@ -1,7 +1,7 @@
 package com.santosschein.app.domain.usecase;
 
 import com.santosschein.app.core.session.SessionStorage;
-import com.santosschein.app.presentation.navigation.AppDestination;
+import com.santosschein.app.domain.model.InitialDestination;
 
 public final class GetInitialAppDestinationUseCase {
 
@@ -11,10 +11,10 @@ public final class GetInitialAppDestinationUseCase {
         this.sessionStorage = sessionStorage;
     }
 
-    public AppDestination execute() {
+    public InitialDestination execute() {
         if (sessionStorage.hasActiveSession()) {
-            return AppDestination.HOME;
+            return InitialDestination.HOME;
         }
-        return AppDestination.LOGIN;
+        return InitialDestination.LOGIN;
     }
 }

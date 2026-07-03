@@ -8,7 +8,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.santosschein.app.core.config.AppContainer;
-import com.santosschein.app.presentation.home.HomeFragment;
+import com.santosschein.app.domain.model.InitialDestination;
 import com.santosschein.app.presentation.navigation.AppDestination;
 import com.santosschein.app.presentation.navigation.FragmentAppNavigator;
 
@@ -34,8 +34,15 @@ public class MainActivity extends AppCompatActivity {
         navigator = new FragmentAppNavigator(getSupportFragmentManager(), CONTENT_VIEW_ID);
 
         if (savedInstanceState == null) {
-            AppDestination initialDestination = appContainer.getInitialAppDestinationUseCase().execute();
-            navigator.navigateTo(initialDestination);
+            InitialDestination initialDestination = appContainer.getInitialAppDestinationUseCase().execute();
+            navigator.navigateTo(toAppDestination(initialDestination));
         }
+    }
+
+    private AppDestination toAppDestination(InitialDestination initialDestination) {
+        if (initialDestination == InitialDestination.HOME) {
+            return AppDestination.HOME;
+        }
+        return AppDestination.LOGIN;
     }
 }

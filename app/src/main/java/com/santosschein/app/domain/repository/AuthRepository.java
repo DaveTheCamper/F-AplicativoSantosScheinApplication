@@ -1,11 +1,14 @@
 package com.santosschein.app.domain.repository;
 
 import com.santosschein.app.core.util.Result;
-import com.santosschein.app.domain.model.User;
+import com.santosschein.app.domain.model.AuthSession;
+import com.santosschein.app.domain.model.RegisterUserInput;
 
 public interface AuthRepository {
 
-    Result<User> getCurrentUser();
+    Result<AuthSession> login(String email, String password);
 
-    Result<Void> logout();
+    Result<Void> register(RegisterUserInput input);
+
+    void logout();
 }
