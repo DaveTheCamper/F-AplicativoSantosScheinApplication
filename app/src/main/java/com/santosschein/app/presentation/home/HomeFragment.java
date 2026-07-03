@@ -62,9 +62,7 @@ public final class HomeFragment extends Fragment {
         view.findViewById(R.id.createReservationButton)
                 .setOnClickListener(v -> activity.navigateTo(AppDestination.RESERVATION_CREATE));
         view.findViewById(R.id.upcomingReservationsButton)
-                .setOnClickListener(v -> activity.navigateTo(AppDestination.RESERVATION_UPCOMING));
-        view.findViewById(R.id.pastReservationsButton)
-                .setOnClickListener(v -> activity.navigateTo(AppDestination.RESERVATION_PAST));
+                .setOnClickListener(v -> activity.navigateTo(AppDestination.RESERVATIONS));
         view.findViewById(R.id.profileButton)
                 .setOnClickListener(v -> activity.navigateTo(AppDestination.PROFILE));
         MaterialButton logoutButton = view.findViewById(R.id.logoutButton);

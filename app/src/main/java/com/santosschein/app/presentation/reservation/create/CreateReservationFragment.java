@@ -69,7 +69,7 @@ public final class CreateReservationFragment extends Fragment {
         ).get(CreateReservationViewModel.class);
 
         MaterialToolbar toolbar = view.findViewById(R.id.toolbar);
-        toolbar.setNavigationOnClickListener(v -> activity.navigateBack());
+        toolbar.setNavigationIcon(null);
 
         monthTextView = view.findViewById(R.id.monthTextView);
         emptyTextView = view.findViewById(R.id.emptyTextView);

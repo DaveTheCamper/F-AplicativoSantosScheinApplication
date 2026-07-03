@@ -76,7 +76,7 @@ public class DomainUseCaseTest {
                 LocalDate.now().plusDays(1),
                 "12345678900",
                 "ana@email.com",
-                "123456"
+                "Senha@123"
         );
 
         Result<Void> result = useCase.execute(input);
@@ -97,7 +97,7 @@ public class DomainUseCaseTest {
                 LocalDate.of(1998, 3, 10),
                 "12345678900",
                 "ana@email.com",
-                "123456"
+                "Senha@123"
         );
 
         Result<Void> result = useCase.execute(input);
@@ -105,6 +105,46 @@ public class DomainUseCaseTest {
         assertTrue(result.isSuccess());
         assertTrue(repository.registerCalled);
         assertSame(input, repository.lastRegisterInput);
+    }
+
+    @Test
+    public void registerWithShortPasswordReturnsValidationError() {
+        assertRegisterValidationError(validRegisterInputWithPassword("Se1@"));
+    }
+
+    @Test
+    public void registerWithPasswordWithoutLetterReturnsValidationError() {
+        assertRegisterValidationError(validRegisterInputWithPassword("12345678@"));
+    }
+
+    @Test
+    public void registerWithPasswordWithoutNumberReturnsValidationError() {
+        assertRegisterValidationError(validRegisterInputWithPassword("Senha@@@"));
+    }
+
+    @Test
+    public void registerWithPasswordWithoutSymbolReturnsValidationError() {
+        assertRegisterValidationError(validRegisterInputWithPassword("Senha123"));
+    }
+
+    @Test
+    public void registerWithIncompleteCpfReturnsValidationError() {
+        FakeAuthRepository repository = new FakeAuthRepository();
+        RegisterUserUseCase useCase = new RegisterUserUseCase(repository);
+        RegisterUserInput input = new RegisterUserInput(
+                "Ana",
+                "Santos",
+                LocalDate.of(1998, 3, 10),
+                "1234567890",
+                "ana@email.com",
+                "Senha@123"
+        );
+
+        Result<Void> result = useCase.execute(input);
+
+        assertFalse(result.isSuccess());
+        assertFalse(repository.registerCalled);
+        assertEquals(ErrorType.VALIDATION, result.getError().getType());
     }
 
     @Test
@@ -312,5 +352,27 @@ public class DomainUseCaseTest {
                 new BigDecimal("120.00"),
                 ReservationStatus.ACTIVE
         );
+    }
+
+    private static RegisterUserInput validRegisterInputWithPassword(String password) {
+        return new RegisterUserInput(
+                "Ana",
+                "Santos",
+                LocalDate.of(1998, 3, 10),
+                "12345678900",
+                "ana@email.com",
+                password
+        );
+    }
+
+    private static void assertRegisterValidationError(RegisterUserInput input) {
+        FakeAuthRepository repository = new FakeAuthRepository();
+        RegisterUserUseCase useCase = new RegisterUserUseCase(repository);
+
+        Result<Void> result = useCase.execute(input);
+
+        assertFalse(result.isSuccess());
+        assertFalse(repository.registerCalled);
+        assertEquals(ErrorType.VALIDATION, result.getError().getType());
     }
 }

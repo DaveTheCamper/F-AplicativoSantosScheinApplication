@@ -51,7 +51,7 @@ public final class ProfileFragment extends Fragment {
         ).get(ProfileViewModel.class);
 
         MaterialToolbar toolbar = view.findViewById(R.id.toolbar);
-        toolbar.setNavigationOnClickListener(v -> activity.navigateBack());
+        toolbar.setNavigationIcon(null);
 
         nameTextView = view.findViewById(R.id.nameTextView);
         birthDateTextView = view.findViewById(R.id.birthDateTextView);
@@ -80,7 +80,7 @@ public final class ProfileFragment extends Fragment {
         }
         nameTextView.setText(user.getFirstName() + " " + user.getLastName());
         birthDateTextView.setText("Nascimento: " + PresentationFormatters.date(user.getBirthDate()));
-        documentTextView.setText("Documento: " + user.getDocument());
-        emailTextView.setText("E-mail: " + user.getEmail());
+        documentTextView.setText("CPF: " + PresentationFormatters.cpf(user.getDocument()));
+        emailTextView.setText(user.getEmail());
     }
 }

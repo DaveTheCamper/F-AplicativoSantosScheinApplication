@@ -19,6 +19,8 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.santosschein.app.MainActivity;
 import com.santosschein.app.R;
 import com.santosschein.app.presentation.common.AppViewModelFactory;
+import com.santosschein.app.presentation.common.MaskedTextWatcher;
+import com.santosschein.app.presentation.common.PresentationFormatters;
 
 public final class RegisterFragment extends Fragment {
 
@@ -75,6 +77,8 @@ public final class RegisterFragment extends Fragment {
         registerButton = view.findViewById(R.id.registerButton);
         progressIndicator = view.findViewById(R.id.progressIndicator);
 
+        birthDateEditText.addTextChangedListener(new MaskedTextWatcher(birthDateEditText, "##/##/####"));
+        documentEditText.addTextChangedListener(new MaskedTextWatcher(documentEditText, "###.###.###-##"));
         registerButton.setOnClickListener(v -> submitRegister());
         viewModel.getRegisterState().observe(getViewLifecycleOwner(), state -> {
             boolean loading = state.isLoading();
@@ -111,17 +115,20 @@ public final class RegisterFragment extends Fragment {
         if (birthDate.trim().isEmpty()) {
             birthDateInputLayout.setError("Data de nascimento obrigatoria.");
             valid = false;
+        } else if (PresentationFormatters.parseBrazilianDate(birthDate) == null) {
+            birthDateInputLayout.setError("Informe uma data valida no formato DD/MM/AAAA.");
+            valid = false;
         }
-        if (document.trim().isEmpty()) {
-            documentInputLayout.setError("Documento obrigatorio.");
+        if (PresentationFormatters.onlyDigits(document).length() != 11) {
+            documentInputLayout.setError("Informe um CPF completo.");
             valid = false;
         }
         if (email.trim().isEmpty() || !email.contains("@")) {
             emailInputLayout.setError("Informe um e-mail valido.");
             valid = false;
         }
-        if (password.trim().length() < 6) {
-            passwordInputLayout.setError("A senha deve ter ao menos 6 caracteres.");
+        if (isWeakPassword(password)) {
+            passwordInputLayout.setError("Use 8+ caracteres com letras, numeros e simbolos.");
             valid = false;
         }
         if (valid) {
@@ -140,5 +147,25 @@ public final class RegisterFragment extends Fragment {
 
     private String textOf(TextInputEditText editText) {
         return editText.getText() != null ? editText.getText().toString() : "";
+    }
+
+    private boolean isWeakPassword(String password) {
+        if (password == null || password.length() < 8) {
+            return true;
+        }
+        boolean hasLetter = false;
+        boolean hasNumber = false;
+        boolean hasSymbol = false;
+        for (int i = 0; i < password.length(); i++) {
+            char current = password.charAt(i);
+            if (Character.isLetter(current)) {
+                hasLetter = true;
+            } else if (Character.isDigit(current)) {
+                hasNumber = true;
+            } else {
+                hasSymbol = true;
+            }
+        }
+        return !hasLetter || !hasNumber || !hasSymbol;
     }
 }

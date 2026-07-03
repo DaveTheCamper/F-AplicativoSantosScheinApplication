@@ -22,7 +22,7 @@ public final class ReservationAdapter extends RecyclerView.Adapter<ReservationAd
         void onCancelClick(Reservation reservation);
     }
 
-    private final boolean showCancelButton;
+    private boolean showCancelButton;
     private final Listener listener;
     private final List<Reservation> reservations = new ArrayList<>();
 
@@ -37,6 +37,11 @@ public final class ReservationAdapter extends RecyclerView.Adapter<ReservationAd
         notifyDataSetChanged();
     }
 
+    public void setShowCancelButton(boolean showCancelButton) {
+        this.showCancelButton = showCancelButton;
+        notifyDataSetChanged();
+    }
+
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -48,14 +53,13 @@ public final class ReservationAdapter extends RecyclerView.Adapter<ReservationAd
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Reservation reservation = reservations.get(position);
         holder.fieldNameTextView.setText(reservation.getFieldName());
-        holder.detailsTextView.setText(PresentationFormatters.date(reservation.getDate())
-                + " • "
+        holder.dateTextView.setText("Data: " + PresentationFormatters.date(reservation.getDate()));
+        holder.timeTextView.setText("Horario: "
                 + PresentationFormatters.time(reservation.getStartTime())
                 + " - "
-                + PresentationFormatters.time(reservation.getEndTime())
-                + " • "
-                + PresentationFormatters.money(reservation.getAmount()));
-        holder.statusTextView.setText("Status: " + reservation.getStatus().name());
+                + PresentationFormatters.time(reservation.getEndTime()));
+        holder.amountTextView.setText("Valor: " + PresentationFormatters.money(reservation.getAmount()));
+        holder.statusTextView.setText(reservation.getStatus().name());
         holder.cancelButton.setVisibility(showCancelButton ? View.VISIBLE : View.GONE);
         holder.cancelButton.setOnClickListener(v -> listener.onCancelClick(reservation));
     }
@@ -67,14 +71,18 @@ public final class ReservationAdapter extends RecyclerView.Adapter<ReservationAd
 
     static final class ViewHolder extends RecyclerView.ViewHolder {
         private final TextView fieldNameTextView;
-        private final TextView detailsTextView;
+        private final TextView dateTextView;
+        private final TextView timeTextView;
+        private final TextView amountTextView;
         private final TextView statusTextView;
         private final MaterialButton cancelButton;
 
         ViewHolder(@NonNull View itemView) {
             super(itemView);
             fieldNameTextView = itemView.findViewById(R.id.fieldNameTextView);
-            detailsTextView = itemView.findViewById(R.id.detailsTextView);
+            dateTextView = itemView.findViewById(R.id.dateTextView);
+            timeTextView = itemView.findViewById(R.id.timeTextView);
+            amountTextView = itemView.findViewById(R.id.amountTextView);
             statusTextView = itemView.findViewById(R.id.statusTextView);
             cancelButton = itemView.findViewById(R.id.cancelButton);
         }

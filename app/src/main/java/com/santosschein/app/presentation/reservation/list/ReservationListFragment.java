@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.button.MaterialButtonToggleGroup;
 import com.google.android.material.progressindicator.CircularProgressIndicator;
 import com.google.android.material.snackbar.Snackbar;
 import com.santosschein.app.MainActivity;
@@ -29,6 +30,7 @@ public final class ReservationListFragment extends Fragment {
     public static final String MODE_UPCOMING = "upcoming";
     public static final String MODE_PAST = "past";
     private static final String ARG_MODE = "mode";
+    private static final String ARG_SHOW_MODE_TOGGLE = "showModeToggle";
 
     private ReservationListViewModel viewModel;
     private ReservationAdapter adapter;
@@ -36,11 +38,13 @@ public final class ReservationListFragment extends Fragment {
     private TextView emptyTextView;
     private CircularProgressIndicator progressIndicator;
     private boolean pastMode;
+    private boolean showModeToggle;
 
-    public static ReservationListFragment newInstance(String mode) {
+    public static ReservationListFragment newInstance(String mode, boolean showModeToggle) {
         ReservationListFragment fragment = new ReservationListFragment();
         Bundle args = new Bundle();
         args.putString(ARG_MODE, mode);
+        args.putBoolean(ARG_SHOW_MODE_TOGGLE, showModeToggle);
         fragment.setArguments(args);
         return fragment;
     }
@@ -60,14 +64,23 @@ public final class ReservationListFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         MainActivity activity = (MainActivity) requireActivity();
         pastMode = MODE_PAST.equals(getArguments() != null ? getArguments().getString(ARG_MODE) : MODE_UPCOMING);
+        showModeToggle = getArguments() != null && getArguments().getBoolean(ARG_SHOW_MODE_TOGGLE);
         viewModel = new ViewModelProvider(
                 this,
                 new AppViewModelFactory(activity.getAppContainer())
         ).get(ReservationListViewModel.class);
 
         MaterialToolbar toolbar = view.findViewById(R.id.toolbar);
-        toolbar.setTitle(pastMode ? "Reservas passadas" : "Reservas futuras");
-        toolbar.setNavigationOnClickListener(v -> activity.navigateBack());
+        toolbar.setTitle(showModeToggle ? "Reservas" : (pastMode ? "Reservas passadas" : "Reservas futuras"));
+        if (showModeToggle) {
+            toolbar.setNavigationIcon(null);
+        } else {
+            toolbar.setNavigationOnClickListener(v -> activity.navigateBack());
+        }
+
+        MaterialButtonToggleGroup modeToggleGroup = view.findViewById(R.id.modeToggleGroup);
+        modeToggleGroup.setVisibility(showModeToggle ? View.VISIBLE : View.GONE);
+        modeToggleGroup.check(pastMode ? R.id.pastToggleButton : R.id.upcomingToggleButton);
 
         recyclerView = view.findViewById(R.id.reservationsRecyclerView);
         emptyTextView = view.findViewById(R.id.emptyTextView);
@@ -75,6 +88,14 @@ public final class ReservationListFragment extends Fragment {
         adapter = new ReservationAdapter(!pastMode, this::confirmCancel);
         recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
         recyclerView.setAdapter(adapter);
+        modeToggleGroup.addOnButtonCheckedListener((group, checkedId, isChecked) -> {
+            if (!isChecked) {
+                return;
+            }
+            pastMode = checkedId == R.id.pastToggleButton;
+            adapter.setShowCancelButton(!pastMode);
+            viewModel.load(pastMode);
+        });
 
         viewModel.getReservationsState().observe(getViewLifecycleOwner(), state -> {
             progressIndicator.setVisibility(state.isLoading() ? View.VISIBLE : View.GONE);

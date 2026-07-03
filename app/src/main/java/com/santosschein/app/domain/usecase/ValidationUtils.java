@@ -17,6 +17,30 @@ final class ValidationUtils {
         return isBlank(email) || !email.contains("@");
     }
 
+    static boolean isInvalidCpf(String document) {
+        return document == null || document.replaceAll("\\D", "").length() != 11;
+    }
+
+    static boolean isWeakPassword(String password) {
+        if (password == null || password.length() < 8) {
+            return true;
+        }
+        boolean hasLetter = false;
+        boolean hasNumber = false;
+        boolean hasSymbol = false;
+        for (int i = 0; i < password.length(); i++) {
+            char current = password.charAt(i);
+            if (Character.isLetter(current)) {
+                hasLetter = true;
+            } else if (Character.isDigit(current)) {
+                hasNumber = true;
+            } else {
+                hasSymbol = true;
+            }
+        }
+        return !hasLetter || !hasNumber || !hasSymbol;
+    }
+
     static <T> Result<T> validationError(String message) {
         return Result.failure(new AppError(ErrorType.VALIDATION, message));
     }

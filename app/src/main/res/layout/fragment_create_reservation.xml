@@ -10,11 +10,11 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="@color/santos_royal_blue"
+        android:background="@color/santos_surface"
         android:title="Nova reserva"
-        android:titleTextColor="@color/white"
+        android:titleTextColor="@color/santos_graphite"
         app:navigationIcon="@android:drawable/ic_menu_revert"
-        app:navigationIconTint="@color/white" />
+        app:navigationIconTint="@color/santos_royal_blue" />
 
     <ScrollView
         android:layout_width="match_parent"
@@ -27,40 +27,51 @@
             android:orientation="vertical"
             android:padding="16dp">
 
-            <LinearLayout
+            <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
+                app:cardBackgroundColor="@color/santos_surface"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="1dp"
+                app:strokeColor="@color/santos_blue_gray"
+                app:strokeWidth="1dp">
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/previousMonthButton"
-                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:text="‹"
-                    android:textColor="@color/santos_royal_blue"
-                    app:cornerRadius="8dp" />
-
-                <TextView
-                    android:id="@+id/monthTextView"
-                    android:layout_width="0dp"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:textColor="@color/santos_graphite"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="12dp">
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/nextMonthButton"
-                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:text="›"
-                    android:textColor="@color/santos_royal_blue"
-                    app:cornerRadius="8dp" />
-            </LinearLayout>
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/previousMonthButton"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:text="‹"
+                        android:textColor="@color/santos_royal_blue"
+                        app:cornerRadius="8dp" />
+
+                    <TextView
+                        android:id="@+id/monthTextView"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:textColor="@color/santos_graphite"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/nextMonthButton"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:text="›"
+                        android:textColor="@color/santos_royal_blue"
+                        app:cornerRadius="8dp" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/calendarRecyclerView"

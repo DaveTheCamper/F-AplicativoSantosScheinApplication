@@ -7,10 +7,10 @@ import androidx.lifecycle.ViewModel;
 import com.santosschein.app.core.util.Result;
 import com.santosschein.app.domain.model.RegisterUserInput;
 import com.santosschein.app.domain.usecase.RegisterUserUseCase;
+import com.santosschein.app.presentation.common.PresentationFormatters;
 import com.santosschein.app.presentation.common.UiState;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeParseException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -37,10 +37,9 @@ public final class RegisterViewModel extends ViewModel {
             String password
     ) {
         LocalDate parsedBirthDate;
-        try {
-            parsedBirthDate = LocalDate.parse(birthDate);
-        } catch (DateTimeParseException exception) {
-            registerState.setValue(UiState.error("Informe a data de nascimento no formato AAAA-MM-DD."));
+        parsedBirthDate = PresentationFormatters.parseBrazilianDate(birthDate);
+        if (parsedBirthDate == null) {
+            registerState.setValue(UiState.error("Informe a data de nascimento no formato DD/MM/AAAA."));
             return;
         }
 
@@ -49,7 +48,7 @@ public final class RegisterViewModel extends ViewModel {
                 firstName,
                 lastName,
                 parsedBirthDate,
-                document,
+                PresentationFormatters.onlyDigits(document),
                 email,
                 password
         );

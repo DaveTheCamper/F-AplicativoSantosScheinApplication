@@ -5,6 +5,7 @@ import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.santosschein.app.core.config.AppContainer;
 import com.santosschein.app.domain.model.InitialDestination;
 import com.santosschein.app.presentation.navigation.AppDestination;
@@ -14,6 +15,7 @@ public class MainActivity extends AppCompatActivity {
 
     private AppContainer appContainer;
     private FragmentAppNavigator navigator;
+    private BottomNavigationView bottomNavigationView;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -22,6 +24,27 @@ public class MainActivity extends AppCompatActivity {
 
         appContainer = ((SantosScheinApplication) getApplication()).getAppContainer();
         navigator = new FragmentAppNavigator(getSupportFragmentManager(), R.id.fragment_container);
+        bottomNavigationView = findViewById(R.id.bottomNavigationView);
+        bottomNavigationView.setOnItemSelectedListener(item -> {
+            int itemId = item.getItemId();
+            if (itemId == R.id.navigation_home) {
+                navigateTo(AppDestination.HOME);
+                return true;
+            }
+            if (itemId == R.id.navigation_create_reservation) {
+                navigateTo(AppDestination.RESERVATION_CREATE);
+                return true;
+            }
+            if (itemId == R.id.navigation_reservations) {
+                navigateTo(AppDestination.RESERVATIONS);
+                return true;
+            }
+            if (itemId == R.id.navigation_profile) {
+                navigateTo(AppDestination.PROFILE);
+                return true;
+            }
+            return false;
+        });
 
         if (savedInstanceState == null) {
             InitialDestination initialDestination = appContainer.getInitialAppDestinationUseCase().execute();
@@ -35,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void navigateTo(AppDestination destination) {
         navigator.navigateTo(destination);
+        updateBottomNavigation(destination);
     }
 
     public void navigateBack() {
@@ -50,5 +74,33 @@ public class MainActivity extends AppCompatActivity {
             return AppDestination.HOME;
         }
         return AppDestination.LOGIN;
+    }
+
+    private void updateBottomNavigation(AppDestination destination) {
+        boolean authenticatedArea = destination != AppDestination.LOGIN && destination != AppDestination.REGISTER;
+        bottomNavigationView.setVisibility(authenticatedArea ? android.view.View.VISIBLE : android.view.View.GONE);
+        int menuItemId = menuItemIdFor(destination);
+        if (menuItemId != 0) {
+            bottomNavigationView.getMenu().findItem(menuItemId).setChecked(true);
+        }
+    }
+
+    private int menuItemIdFor(AppDestination destination) {
+        switch (destination) {
+            case HOME:
+                return R.id.navigation_home;
+            case RESERVATION_CREATE:
+                return R.id.navigation_create_reservation;
+            case RESERVATIONS:
+            case RESERVATION_UPCOMING:
+            case RESERVATION_PAST:
+                return R.id.navigation_reservations;
+            case PROFILE:
+                return R.id.navigation_profile;
+            case LOGIN:
+            case REGISTER:
+            default:
+                return 0;
+        }
     }
 }

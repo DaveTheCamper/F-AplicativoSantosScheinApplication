@@ -5,6 +5,7 @@ public enum AppDestination {
     REGISTER,
     HOME,
     RESERVATION_CREATE,
+    RESERVATIONS,
     RESERVATION_UPCOMING,
     RESERVATION_PAST,
     PROFILE

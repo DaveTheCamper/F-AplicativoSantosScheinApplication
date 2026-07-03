@@ -1,120 +1,177 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/santos_ice_white"
-    android:orientation="vertical">
+    android:fillViewport="true">
 
-    <com.google.android.material.appbar.MaterialToolbar
-        android:id="@+id/toolbar"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="@color/santos_royal_blue"
-        android:title="@string/app_name"
-        android:titleTextColor="@color/white" />
-
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1">
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="18dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="20dp">
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/greetingTextView"
-                android:layout_width="match_parent"
+            <ImageView
+                android:id="@+id/homeLogoImageView"
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:contentDescription="@string/app_name"
+                android:scaleType="fitCenter"
+                android:src="@drawable/logo" />
+
+            <LinearLayout
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:textColor="@color/santos_graphite"
-                android:textSize="22sp"
-                android:textStyle="bold" />
+                android:layout_marginStart="12dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
 
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/nextReservationCard"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                app:cardBackgroundColor="@color/white"
-                app:cardCornerRadius="8dp"
-                app:strokeColor="@color/santos_blue_gray"
-                app:strokeWidth="1dp">
-
-                <LinearLayout
+                <TextView
+                    android:id="@+id/greetingTextView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="16dp">
+                    android:textColor="@color/santos_graphite"
+                    android:textSize="21sp"
+                    android:textStyle="bold" />
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Próxima reserva"
-                        android:textColor="@color/santos_royal_blue"
-                        android:textSize="14sp"
-                        android:textStyle="bold" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:text="Encontre e reserve seu horario"
+                    android:textColor="@color/santos_graphite"
+                    android:textSize="13sp" />
+            </LinearLayout>
+        </LinearLayout>
 
-                    <TextView
-                        android:id="@+id/nextReservationTitleTextView"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:textColor="@color/santos_graphite"
-                        android:textSize="18sp"
-                        android:textStyle="bold" />
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="18dp"
+            app:cardBackgroundColor="@color/santos_royal_blue"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="2dp">
 
-                    <TextView
-                        android:id="@+id/nextReservationDetailsTextView"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="6dp"
-                        android:textColor="@color/santos_graphite"
-                        android:textSize="14sp" />
-                </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
-
-            <TextView
-                android:id="@+id/emptyNextReservationTextView"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:background="@color/white"
-                android:padding="16dp"
-                android:text="Você ainda não tem uma próxima reserva."
-                android:textColor="@color/santos_graphite"
-                android:textSize="15sp"
-                android:visibility="gone" />
+                android:orientation="vertical"
+                android:padding="18dp">
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/createReservationButton"
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Campos disponiveis para sua proxima partida"
+                    android:textColor="@color/white"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:text="Escolha uma data, veja os horarios livres e confirme em poucos passos."
+                    android:textColor="@color/white"
+                    android:textSize="14sp" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/createReservationButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="54dp"
+                    android:layout_marginTop="16dp"
+                    android:text="Nova reserva"
+                    android:textColor="@color/santos_graphite"
+                    app:backgroundTint="@color/santos_energy_orange"
+                    app:cornerRadius="8dp" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="22dp"
+            android:text="Proxima reserva"
+            android:textColor="@color/santos_graphite"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/nextReservationCard"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            app:cardBackgroundColor="@color/santos_surface"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="1dp"
+            app:strokeColor="@color/santos_blue_gray"
+            app:strokeWidth="1dp">
+
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="56dp"
-                android:layout_marginTop="20dp"
-                android:text="Nova reserva"
-                app:backgroundTint="@color/santos_energy_orange"
-                app:cornerRadius="8dp" />
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:id="@+id/nextReservationTitleTextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/santos_graphite"
+                    android:textSize="19sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/nextReservationDetailsTextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:textColor="@color/santos_graphite"
+                    android:textSize="14sp" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <TextView
+            android:id="@+id/emptyNextReservationTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@color/santos_surface_soft"
+            android:padding="16dp"
+            android:text="Voce ainda nao tem uma proxima reserva."
+            android:textColor="@color/santos_graphite"
+            android:textSize="15sp"
+            android:visibility="gone" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="22dp"
+            android:text="Atalhos"
+            android:textColor="@color/santos_graphite"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/upcomingReservationsButton"
                 style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="52dp"
-                android:layout_marginTop="12dp"
-                android:text="Reservas futuras"
-                android:textColor="@color/santos_royal_blue"
-                app:cornerRadius="8dp"
-                app:strokeColor="@color/santos_royal_blue" />
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/pastReservationsButton"
-                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                android:layout_width="match_parent"
-                android:layout_height="52dp"
-                android:layout_marginTop="8dp"
-                android:text="Reservas passadas"
+                android:layout_marginEnd="6dp"
+                android:layout_weight="1"
+                android:text="Reservas"
                 android:textColor="@color/santos_royal_blue"
                 app:cornerRadius="8dp"
                 app:strokeColor="@color/santos_royal_blue" />
@@ -122,31 +179,32 @@
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/profileButton"
                 style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="52dp"
-                android:layout_marginTop="8dp"
-                android:text="Dados cadastrais"
+                android:layout_marginStart="6dp"
+                android:layout_weight="1"
+                android:text="Perfil"
                 android:textColor="@color/santos_royal_blue"
                 app:cornerRadius="8dp"
                 app:strokeColor="@color/santos_royal_blue" />
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/logoutButton"
-                style="@style/Widget.MaterialComponents.Button.TextButton"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text="Sair"
-                android:textColor="@color/santos_graphite" />
-
-            <com.google.android.material.progressindicator.CircularProgressIndicator
-                android:id="@+id/progressIndicator"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="16dp"
-                android:visibility="gone"
-                app:indicatorColor="@color/santos_energy_orange" />
         </LinearLayout>
-    </ScrollView>
-</LinearLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/logoutButton"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Sair"
+            android:textColor="@color/santos_graphite" />
+
+        <com.google.android.material.progressindicator.CircularProgressIndicator
+            android:id="@+id/progressIndicator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="16dp"
+            android:visibility="gone"
+            app:indicatorColor="@color/santos_energy_orange" />
+    </LinearLayout>
+</ScrollView>

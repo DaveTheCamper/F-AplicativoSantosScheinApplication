@@ -5,6 +5,7 @@ import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.Locale;
 
 public final class PresentationFormatters {
@@ -28,5 +29,31 @@ public final class PresentationFormatters {
             return "";
         }
         return NumberFormat.getCurrencyInstance(new Locale("pt", "BR")).format(amount);
+    }
+
+    public static String cpf(String document) {
+        String digits = onlyDigits(document);
+        if (digits.length() != 11) {
+            return document != null ? document : "";
+        }
+        return digits.substring(0, 3)
+                + "."
+                + digits.substring(3, 6)
+                + "."
+                + digits.substring(6, 9)
+                + "-"
+                + digits.substring(9);
+    }
+
+    public static String onlyDigits(String value) {
+        return value == null ? "" : value.replaceAll("\\D", "");
+    }
+
+    public static LocalDate parseBrazilianDate(String value) {
+        try {
+            return LocalDate.parse(value, DATE_FORMAT);
+        } catch (DateTimeParseException exception) {
+            return null;
+        }
     }
 }

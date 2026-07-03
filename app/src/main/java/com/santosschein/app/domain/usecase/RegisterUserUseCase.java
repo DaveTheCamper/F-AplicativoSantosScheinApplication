@@ -27,8 +27,8 @@ public final class RegisterUserUseCase {
         if (input.getBirthDate() == null || input.getBirthDate().isAfter(LocalDate.now())) {
             return ValidationUtils.validationError("Informe uma data de nascimento valida.");
         }
-        if (ValidationUtils.isBlank(input.getDocument())) {
-            return ValidationUtils.validationError("Informe o documento.");
+        if (ValidationUtils.isInvalidCpf(input.getDocument())) {
+            return ValidationUtils.validationError("Informe um CPF valido.");
         }
         if (ValidationUtils.isInvalidEmail(input.getEmail())) {
             return ValidationUtils.validationError("Informe um e-mail valido.");
@@ -36,8 +36,8 @@ public final class RegisterUserUseCase {
         if (ValidationUtils.isBlank(input.getPassword())) {
             return ValidationUtils.validationError("Informe a senha.");
         }
-        if (input.getPassword().trim().length() < 6) {
-            return ValidationUtils.validationError("A senha deve ter ao menos 6 caracteres.");
+        if (ValidationUtils.isWeakPassword(input.getPassword())) {
+            return ValidationUtils.validationError("A senha deve ter no minimo 8 caracteres, letras, numeros e simbolos.");
         }
         return authRepository.register(input);
     }

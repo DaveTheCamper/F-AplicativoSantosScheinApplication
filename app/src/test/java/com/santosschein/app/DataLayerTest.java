@@ -74,7 +74,7 @@ public class DataLayerTest {
                 LocalDate.of(1992, 5, 12),
                 "98765432100",
                 "maria@email.com",
-                "senha123"
+                "Senha@123"
         );
 
         Result<Void> result = repository.register(input);
@@ -91,7 +91,7 @@ public class DataLayerTest {
                 LocalDate.of(1995, 4, 20),
                 "12345678900",
                 "novo@email.com",
-                "senha123"
+                "Senha@123"
         );
 
         Result<Void> result = repository.register(input);
@@ -109,7 +109,7 @@ public class DataLayerTest {
                 LocalDate.of(1993, 8, 4),
                 "22233344455",
                 MockDataStore.VALID_EMAIL,
-                "senha123"
+                "Senha@123"
         );
 
         Result<Void> result = repository.register(input);
