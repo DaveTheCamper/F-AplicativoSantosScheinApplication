@@ -245,6 +245,8 @@ public class DataLayerTest {
     public void httpErrorMapperMapsExpectedStatusCodes() {
         HttpErrorMapper mapper = new HttpErrorMapper();
 
+        assertEquals(ErrorType.VALIDATION, mapper.fromHttpCode(400).getType());
+        assertEquals("400", mapper.fromHttpCode(400).getCode());
         assertEquals(ErrorType.UNAUTHORIZED, mapper.fromHttpCode(401).getType());
         assertEquals(ErrorType.FORBIDDEN, mapper.fromHttpCode(403).getType());
         assertEquals(ErrorType.NOT_FOUND, mapper.fromHttpCode(404).getType());

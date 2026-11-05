@@ -173,7 +173,7 @@ public final class CreateReservationFragment extends Fragment {
         LocalDate cursor = firstDay.minusDays(offset);
         for (int i = 0; i < 42; i++) {
             boolean inMonth = YearMonth.from(cursor).equals(model.getVisibleMonth());
-            boolean available = inMonth && model.getAvailableDays().contains(cursor);
+            boolean available = inMonth && !cursor.isBefore(LocalDate.now()) && model.getAvailableDays().contains(cursor);
             boolean selected = cursor.equals(model.getSelectedDate());
             days.add(new CalendarDay(cursor, inMonth, available, selected));
             cursor = cursor.plusDays(1);

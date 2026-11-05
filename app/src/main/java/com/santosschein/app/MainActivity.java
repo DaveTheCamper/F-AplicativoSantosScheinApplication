@@ -2,6 +2,7 @@ package com.santosschein.app;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -13,9 +14,12 @@ import com.santosschein.app.presentation.navigation.FragmentAppNavigator;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static final String KEY_CURRENT_DESTINATION = "current_destination";
+
     private AppContainer appContainer;
     private FragmentAppNavigator navigator;
     private BottomNavigationView bottomNavigationView;
+    private AppDestination currentDestination;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -48,7 +52,21 @@ public class MainActivity extends AppCompatActivity {
 
         if (savedInstanceState == null) {
             InitialDestination initialDestination = appContainer.getInitialAppDestinationUseCase().execute();
-            navigator.navigateTo(toAppDestination(initialDestination));
+            navigateTo(toAppDestination(initialDestination));
+        } else {
+            String destinationName = savedInstanceState.getString(KEY_CURRENT_DESTINATION);
+            if (destinationName != null) {
+                currentDestination = AppDestination.valueOf(destinationName);
+                updateBottomNavigation(currentDestination);
+            }
+        }
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if (currentDestination != null) {
+            outState.putString(KEY_CURRENT_DESTINATION, currentDestination.name());
         }
     }
 
@@ -58,6 +76,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void navigateTo(AppDestination destination) {
         navigator.navigateTo(destination);
+        currentDestination = destination;
         updateBottomNavigation(destination);
     }
 
@@ -65,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
         if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
             getSupportFragmentManager().popBackStack();
         } else {
-            navigator.navigateTo(AppDestination.HOME);
+            navigateTo(AppDestination.HOME);
         }
     }
 

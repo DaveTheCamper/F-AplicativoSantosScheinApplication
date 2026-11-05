@@ -26,8 +26,12 @@ import com.santosschein.app.domain.usecase.RegisterUserUseCase;
 import org.junit.Test;
 
 import java.math.BigDecimal;
+import java.time.Clock;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.ZoneId;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -162,7 +166,34 @@ public class DomainUseCaseTest {
         FakeReservationRepository repository = new FakeReservationRepository();
         CreateReservationUseCase useCase = new CreateReservationUseCase(repository);
 
-        Result<Reservation> result = useCase.execute(LocalDate.of(2026, 7, 10), " ");
+        Result<Reservation> result = useCase.execute(LocalDate.now().plusDays(7), " ");
+
+        assertFalse(result.isSuccess());
+        assertFalse(repository.createReservationCalled);
+        assertNotNull(result.getError());
+        assertEquals(ErrorType.VALIDATION, result.getError().getType());
+    }
+
+    @Test
+    public void createReservationWithPastDateReturnsValidationError() {
+        FakeReservationRepository repository = new FakeReservationRepository();
+        CreateReservationUseCase useCase = new CreateReservationUseCase(repository);
+
+        Result<Reservation> result = useCase.execute(LocalDate.now().minusDays(1), "slot-19");
+
+        assertFalse(result.isSuccess());
+        assertFalse(repository.createReservationCalled);
+        assertNotNull(result.getError());
+        assertEquals(ErrorType.VALIDATION, result.getError().getType());
+    }
+
+    @Test
+    public void createReservationTodayWithPastSlotReturnsValidationError() {
+        FakeReservationRepository repository = new FakeReservationRepository();
+        CreateReservationUseCase useCase = new CreateReservationUseCase(repository, fixedClock());
+        ReservationSlot pastSlot = createSlot("slot-14", LocalTime.of(14, 0));
+
+        Result<Reservation> result = useCase.execute(LocalDate.of(2026, 7, 3), pastSlot);
 
         assertFalse(result.isSuccess());
         assertFalse(repository.createReservationCalled);
@@ -174,7 +205,7 @@ public class DomainUseCaseTest {
     public void createReservationWithValidDataTrimsSlotAndDelegates() {
         FakeReservationRepository repository = new FakeReservationRepository();
         CreateReservationUseCase useCase = new CreateReservationUseCase(repository);
-        LocalDate date = LocalDate.of(2026, 7, 10);
+        LocalDate date = LocalDate.now().plusDays(7);
 
         Result<Reservation> result = useCase.execute(date, " slot-19 ");
 
@@ -190,7 +221,7 @@ public class DomainUseCaseTest {
 
         assertTrue(new GetNextReservationUseCase(repository).execute().isSuccess());
         assertTrue(new GetAvailableDaysUseCase(repository).execute(2026, 7).isSuccess());
-        assertTrue(new GetAvailableSlotsUseCase(repository).execute(LocalDate.of(2026, 7, 10)).isSuccess());
+        assertTrue(new GetAvailableSlotsUseCase(repository).execute(LocalDate.now().plusDays(7)).isSuccess());
         assertTrue(new GetUpcomingReservationsUseCase(repository).execute().isSuccess());
         assertTrue(new GetPastReservationsUseCase(repository).execute().isSuccess());
 
@@ -199,6 +230,36 @@ public class DomainUseCaseTest {
         assertTrue(repository.availableSlotsCalled);
         assertTrue(repository.upcomingReservationsCalled);
         assertTrue(repository.pastReservationsCalled);
+    }
+
+    @Test
+    public void getAvailableSlotsWithPastDateReturnsValidationError() {
+        FakeReservationRepository repository = new FakeReservationRepository();
+        GetAvailableSlotsUseCase useCase = new GetAvailableSlotsUseCase(repository);
+
+        Result<List<ReservationSlot>> result = useCase.execute(LocalDate.now().minusDays(1));
+
+        assertFalse(result.isSuccess());
+        assertFalse(repository.availableSlotsCalled);
+        assertNotNull(result.getError());
+        assertEquals(ErrorType.VALIDATION, result.getError().getType());
+    }
+
+    @Test
+    public void getAvailableSlotsForTodayFiltersPastSlots() {
+        FakeReservationRepository repository = new FakeReservationRepository();
+        repository.availableSlots = Arrays.asList(
+                createSlot("slot-14", LocalTime.of(14, 0)),
+                createSlot("slot-16", LocalTime.of(16, 0))
+        );
+        GetAvailableSlotsUseCase useCase = new GetAvailableSlotsUseCase(repository, fixedClock());
+
+        Result<List<ReservationSlot>> result = useCase.execute(LocalDate.of(2026, 7, 3));
+
+        assertTrue(result.isSuccess());
+        assertTrue(repository.availableSlotsCalled);
+        assertEquals(1, result.getData().size());
+        assertEquals("slot-16", result.getData().get(0).getId());
     }
 
     @Test
@@ -267,6 +328,7 @@ public class DomainUseCaseTest {
         LocalDate lastDate;
         String lastSlotId;
         String lastReservationId;
+        List<ReservationSlot> availableSlots;
 
         @Override
         public Result<Reservation> getNextReservation() {
@@ -284,12 +346,10 @@ public class DomainUseCaseTest {
         public Result<List<ReservationSlot>> getAvailableSlots(LocalDate date) {
             availableSlotsCalled = true;
             lastDate = date;
-            return Result.success(Collections.singletonList(new ReservationSlot(
-                    "slot-19",
-                    LocalTime.of(19, 0),
-                    LocalTime.of(20, 0),
-                    new BigDecimal("120.00")
-            )));
+            if (availableSlots != null) {
+                return Result.success(availableSlots);
+            }
+            return Result.success(Collections.singletonList(createSlot("slot-19", LocalTime.of(19, 0))));
         }
 
         @Override
@@ -352,6 +412,19 @@ public class DomainUseCaseTest {
                 new BigDecimal("120.00"),
                 ReservationStatus.ACTIVE
         );
+    }
+
+    private static ReservationSlot createSlot(String id, LocalTime startTime) {
+        return new ReservationSlot(
+                id,
+                startTime,
+                startTime.plusHours(1),
+                new BigDecimal("120.00")
+        );
+    }
+
+    private static Clock fixedClock() {
+        return Clock.fixed(Instant.parse("2026-07-03T18:00:00Z"), ZoneId.of("America/Sao_Paulo"));
     }
 
     private static RegisterUserInput validRegisterInputWithPassword(String password) {

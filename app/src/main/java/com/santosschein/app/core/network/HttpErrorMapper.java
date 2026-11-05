@@ -17,6 +17,8 @@ public final class HttpErrorMapper {
 
     public AppError fromHttpCode(int statusCode, String conflictMessage) {
         switch (statusCode) {
+            case 400:
+                return new AppError(ErrorType.VALIDATION, "Dados invalidos. Verifique as informacoes e tente novamente.", "400", null);
             case 401:
                 return new AppError(ErrorType.UNAUTHORIZED, "E-mail ou senha invalidos.", "401", null);
             case 403:

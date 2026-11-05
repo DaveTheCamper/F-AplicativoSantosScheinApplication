@@ -101,7 +101,7 @@ public final class CreateReservationViewModel extends ViewModel {
 
         creationState.setValue(UiState.loading());
         executorService.execute(() -> {
-            Result<Reservation> result = createReservationUseCase.execute(selectedDate, selectedSlot.getId());
+            Result<Reservation> result = createReservationUseCase.execute(selectedDate, selectedSlot);
             if (result.isSuccess()) {
                 creationState.postValue(UiState.success(result.getData()));
             } else {
